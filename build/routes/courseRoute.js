@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const course_controller_1 = require("../controllers/course.controller");
+const auth_1 = require("../middleware/auth");
+const user_controller_1 = require("../controllers/user.controller");
+const courseRouter = express_1.default.Router();
+courseRouter.post('/upload', auth_1.isAutheticated, (0, auth_1.authorizeRole)('admin'), course_controller_1.uploadCourse);
+courseRouter.put('/edit/:id', user_controller_1.updateAccessToken, auth_1.isAutheticated, (0, auth_1.authorizeRole)('admin'), course_controller_1.editCourse);
+courseRouter.get('/get-course/:id', course_controller_1.getCourse);
+courseRouter.get('/all-courses', course_controller_1.getAllCoursesFree);
+courseRouter.get('/paid/:id', user_controller_1.updateAccessToken, auth_1.isAutheticated, course_controller_1.getCoursePaid);
+courseRouter.put('/question', user_controller_1.updateAccessToken, auth_1.isAutheticated, course_controller_1.addQuestion);
+courseRouter.put('/answer', user_controller_1.updateAccessToken, auth_1.isAutheticated, course_controller_1.addAnswer);
+courseRouter.put('/review/:id', user_controller_1.updateAccessToken, auth_1.isAutheticated, course_controller_1.addReview);
+courseRouter.put('/reply', user_controller_1.updateAccessToken, auth_1.isAutheticated, (0, auth_1.authorizeRole)('admin'), course_controller_1.addReplyCourse);
+courseRouter.get('/get-all', user_controller_1.updateAccessToken, auth_1.isAutheticated, course_controller_1.getAllCourses);
+courseRouter.delete('/delete-course/:id', user_controller_1.updateAccessToken, auth_1.isAutheticated, (0, auth_1.authorizeRole)("admin"), course_controller_1.deleteCourse);
+courseRouter.post('/getVdoCipherOTP', course_controller_1.generateVideoUrl);
+courseRouter.get('/search/:key', course_controller_1.courseSearch);
+exports.default = courseRouter;
